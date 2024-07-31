@@ -17,6 +17,7 @@ export class GoogleSearchRunnable extends Runnable<Company, CompanyInfo, Runnabl
       const searchResults = await googleSearch.invoke(`${input.name} site:linkedin.com`);
       const parsedSearchResults: Array<{ link: string }> = JSON.parse(searchResults);
       const links = parsedSearchResults.map((item) => item.link);
+      console.log("Google search links: ", links);
       const result: CompanyInfo = {
         name: input.name,
         links,
