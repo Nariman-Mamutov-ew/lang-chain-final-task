@@ -17,7 +17,7 @@ const parser = new StringOutputParser();
 
 const runParseChatAnswer = (input: string): string => {
   try {
-    return input.match(/\bhttps?:\/\/\S+/gi)[0];
+    return input.match(/\bhttps?:\/\/\S+[^.,!?\s]/gi)[0];
   } catch (e) {
     return "";
   }

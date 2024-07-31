@@ -18,6 +18,7 @@ export const readCSV = (filePath: string): Promise<Company[]> => {
 export const writeCSV = (filePath: string, data: any[]): Promise<void> => {
   const csvWriter = createObjectCsvWriter({
     path: filePath,
+    fieldDelimiter: ";",
     header: [
       { id: "name", title: "name" },
       { id: "link", title: "Link" },
