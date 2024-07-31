@@ -15,7 +15,10 @@ export const readCSV = (filePath: string): Promise<Company[]> => {
   });
 };
 
-export const writeCSV = (filePath: string, data: any[]): Promise<void> => {
+export const appendToCSV = async (
+  filePath: string,
+  data: any[]
+): Promise<void> => {
   const csvWriter = createObjectCsvWriter({
     path: filePath,
     fieldDelimiter: ";",
@@ -24,7 +27,25 @@ export const writeCSV = (filePath: string, data: any[]): Promise<void> => {
       { id: "link", title: "Link" },
       { id: "linkedinLink", title: "LinkedInLink" },
     ],
+    append: true, // Append mode
   });
 
   return csvWriter.writeRecords(data);
+};
+
+// Initialize the CSV file with the header
+export const initializeCSV = async (filePath: string): Promise<void> => {
+  if (!fs.existsSync(filePath)) {
+    const csvWriter = createObjectCsvWriter({
+      path: filePath,
+      fieldDelimiter: ";",
+      header: [
+        { id: "name", title: "name" },
+        { id: "link", title: "Link" },
+        { id: "linkedinLink", title: "LinkedInLink" },
+      ],
+    });
+
+    await csvWriter.writeRecords([]);
+  }
 };

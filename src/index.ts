@@ -3,7 +3,7 @@ import express from "express";
 import pLimit from "p-limit";
 
 import { chain } from "./getLinkedInInfoChain";
-import { readCSV, writeCSV } from "./utils";
+import { appendToCSV, initializeCSV, readCSV } from "./utils";
 
 dotenv.config();
 const app = express();
@@ -12,26 +12,28 @@ const port = process.env.PORT;
 app.get("/process", async (req, res) => {
   try {
     const companies = await readCSV("./src/data/companies_nm.csv");
+    await initializeCSV("./src/data/processed_companies.csv");
 
     const limit = pLimit(2);
-
     const results = await Promise.all(
       companies.map((company, index) =>
         limit(async () => {
           const response = await chain.invoke(company);
           console.log(
             `Number ${index + 1} of ${companies.length}.
-            Company ${company.name} is done.`,
+            Company ${company.name} is done.`
           );
-          return {
+          const updatedCompany = {
             ...company,
             linkedinLink: response,
           };
-        }),
-      ),
+          await appendToCSV("./src/data/processed_companies.csv", [
+            updatedCompany,
+          ]);
+          return updatedCompany;
+        })
+      )
     );
-
-    await writeCSV("./src/data/processed_companies.csv", results);
 
     res.json(results);
   } catch (error) {
