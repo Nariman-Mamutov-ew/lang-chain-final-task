@@ -36,6 +36,7 @@ app.get("/process", async (req, res) => {
     );
 
     res.json(results);
+    console.log("Done");
   } catch (error) {
     console.error("Error during processing:", error);
     res.status(500).json({ error: "Internal server error" });
