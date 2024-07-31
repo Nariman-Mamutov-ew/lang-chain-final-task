@@ -6,7 +6,8 @@ import { GoogleSearchRunnable } from "./GoogleSearchRunnable";
 
 dotenv.config();
 
-const systemTemplate = "Find the most relevant LinkedIn profile for the company from the following links:";
+const systemTemplate =
+  "You are an AI assistant that helps find the most relevant LinkedIn profile for a company. When provided with the company name and a list of possible LinkedIn profile links, you will analyze and select the link that most likely corresponds to the company's official LinkedIn profile. Please ensure the selection is accurate and based on relevance.";
 const promptTemplate = ChatPromptTemplate.fromMessages([
   ["system", systemTemplate],
   ["user", "{name}, {links}"],
